@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.main{
+  background-color: hsl(36deg 5.49% 17.84%);
+  color: white;
+}
+
+input{
+  background-color: hsl(40deg 2.56% 22.94%);
+}
+
+button{
+  background-color: #81b64c;
+}
+.grid-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-row {
+  display: flex;
+}
+
+.grid-cell {
+  /* @apply w-16 h-16; */
+  width: 4.5rem;
+  height: 4.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.grid-cell img {
+  transition: transform 0.3s ease; /* Add a transform transition */
+}
+
+/* Adjust the scale on hover */
+.grid-cell:hover img {
+  transform: scale(1.1); /* Scale the piece on hover */
+}
+
+.joinRoom{
+  filter: drop-shadow(0 0.2rem 0.3rem rgba(0,0,0,.4))
+}
+
+.joinRoom-text-shadow{
+  text-shadow: 0 0.3rem 1.6rem rgba(0,0,0,0.4);
+}
+
+.joinRoom-text-shadow:hover{
+  filter: drop-shadow(0 0.2rem 0.3rem #45753c);
+}
+
+.login:hover{
+  filter: drop-shadow(0 0.2rem 0.3rem #45753c);
+}
+
+.signup:hover{
+  filter: drop-shadow(0 0.2rem 0.3rem rgba(0,0,0,.6));
+}
+.chat-display {
+  background-color: #2b2a28;
+  list-style-type: none;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 10px;
+  margin: 1rem auto;
+  padding: 0;
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-start;
+  overflow: auto;
+  flex-grow: 1;
+}
+
+.post {
+  background-color: #3e3e3e;
+  border-radius: 10px;
+  padding: 0 0 .25rem;
+  margin: .5rem;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.post--left {
+  width: 60%;
+  align-self: flex-start;
+}
+
+.post--right {
+  width: 60%;
+  align-self: flex-end;
+}
+
+.post__header {
+  color: #fff;
+  padding: .25rem .5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .5rem;
+}
+
+.post__header--name {
+  font-weight: bold;
+}
+
+.post__header--time {
+  font-size: .8rem;
+}
+
+.post__text {
+  margin-top: 5px;
+  color: #fff;
+  padding: .25rem .5rem;
+  font-size: 0.875rem; /* Small text size */
+}
+
+.user-list,
+.room-list,
+.activity {
+  width: 100%;
+  min-height: 2.65rem;
+  margin: 0 auto;
+  max-width: 600px;
+  padding: .75rem .25rem;
+}
+
+.activity {
+  font-style: italic;
+}
+
+
+
