@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useChess } from '../ChessContext';
-import ChessBoard from '../components/ChessBoard';
+import Board from '../components/Board';
 import Chat from '../components/Chat';
 
 const ViewGamePage = () => {
@@ -10,14 +10,21 @@ const ViewGamePage = () => {
   const { game } = location.state || {};
   const { setUserSide, setGrid, setTotalMoves, piece, letters } = useChess();
   const movesContainerRef = useRef(null);
-  const [loading, setLoading] = useState(true); // State to manage loading indicator
+  const [loading, setLoading] = useState(true); 
+  const [gameGrid, setGameGrid] = useState([]);
+  const [currentMoveIndex, setCurrentMoveIndex] = useState(0);
 
   useEffect(() => {
     if (game) {
+      const parsedGameState = JSON.parse(game.gameState);
       setUserSide(game.userSide);
-      setGrid(game.grid);
-      setTotalMoves(game.moves); // Assuming `totalMoves` refers to `moves` in your schema
-      setLoading(false); // Set loading to false once data is fetched
+      setGrid(game.gameState);
+      setGameGrid(parsedGameState);
+      setTotalMoves(game.moves); 
+      setLoading(false); 
+    } else {
+      console.log("No Game data");
+      setLoading(true);
     }
   }, [game, setUserSide, setGrid, setTotalMoves]);
 
@@ -27,21 +34,63 @@ const ViewGamePage = () => {
     }
   }, [game?.moves]);
 
+  useEffect(() => {
+    if (game?.moves) {
+      updateBoardForMove(currentMoveIndex);
+    }
+  }, [currentMoveIndex, game]);
+
+  const updateBoardForMove = (index) => {
+    if (!game || !game.moves || game.moves.length === 0) return;
+
+    let newBoardState = JSON.parse(game.gameState);
+
+    // Apply moves up to the current index
+    for (let i = 0; i <= index; i++) {
+      const move = game.moves[i];
+      if (move) {
+        const { start, end } = move;
+        const spiece = start.cell;
+        const epiece = end.cell;
+        newBoardState[start.rowIndex][start.cellIndex] = spiece;
+        if(epiece!='')
+          newBoardState[end.rowIndex][end.cellIndex] = epiece;
+        else
+          newBoardState[end.rowIndex][end.cellIndex] = '';
+      }
+    }
+
+    setGameGrid(newBoardState);
+  };
+
+  const handleForward = () => {
+    if (currentMoveIndex < (game.moves.length - 1)) {
+      setCurrentMoveIndex(currentMoveIndex + 1);
+    }
+  };
+
+  const handleBackward = () => {
+    if (currentMoveIndex > 0) {
+      setCurrentMoveIndex(currentMoveIndex - 1);
+    }
+  };
+
   if (loading && !game) {
     return <div>Loading...</div>;
   }
+
+  console.log(game);
 
   if (!game || !game.moves || game.moves.length === 0) {
     return <div>No game data found or moves available.</div>;
   }
 
-  // Assuming you have logic to determine user and opponent
   const user = game.players.find(p => p.userId === game.userSide);
   const opponent = game.players.find(p => p.userId !== game.userSide);
   const opponentName = opponent ? opponent.username : 'Guest';
 
-  const handleBackToProfile = () => {
-    navigate('/profile');
+  const boxColor = (rowIndex, cellIndex) => {
+    return (rowIndex + cellIndex) % 2 === 0 ? 'bg-beige' : 'bg-green';
   };
 
   return (
@@ -53,13 +102,20 @@ const ViewGamePage = () => {
         <div className='w-1/4'>
           <Chat />
         </div>
-        <div className='w-1/2 flex justify-center'>
-          <ChessBoard />
+        <div className='w-1/2 flex flex-col items-center'>
+          <div className='flex mb-4'>
+            <button className='bg-blue-500 text-white py-2 px-4 rounded mr-2' onClick={handleBackward}>Backward</button>
+            <button className='bg-blue-500 text-white py-2 px-4 rounded' onClick={handleForward}>Forward</button>
+          </div>
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
+            <Board grid={gameGrid} boxColor={boxColor} piece={piece} />
+          )}
         </div>
         <div className='w-1/4'>
           <div className='flex flex-col flex-grow items-center bg-[#262522] rounded-lg m-4 overflow-hidden'>
             <div className='flex items-start gap-4 p-4 w-full bg-[rgb(28,27,25)] rounded-t-lg'>
-              {/* Render user information */}
               <img src={user?.photos?.length > 0 ? `http://localhost:3500/uploads/${user.photos[0]}` : '/user.svg'} alt="User" className='w-16 h-16 p-2 rounded-full border-2 border-gray-700' />
               <div>
                 <p className='text-lg font-bold'>{user?.username || 'Guest'}</p>
@@ -71,7 +127,6 @@ const ViewGamePage = () => {
               <div className='h-[1px] bg-slate-400'></div>
               <div ref={movesContainerRef} className='overflow-y-auto custom-scrollbar'>
                 <ul className='grid grid-cols-2 rounded-md overflow-hidden'>
-                  {/* Render moves */}
                   {game.moves.map((move, index) => (
                     <li className='flex items-center justify-between p-2 bg-[#201f1d] mb-2' key={index}>
                       {index % 2 === 0 && (
@@ -87,7 +142,6 @@ const ViewGamePage = () => {
               </div>
             </div>
             <div className='mt-4 flex items-start gap-4 p-4 w-full bg-[rgb(28,27,25)] rounded-b-lg'>
-              {/* Render opponent information */}
               <img src={opponent?.photos?.length > 0 ? `http://localhost:3500/uploads/${opponent.photos[0]}` : '/user.svg'} alt="Opponent" className='w-16 h-16 rounded-full border-2 border-gray-700 p-2' />
               <div>
                 <p className='text-lg font-bold'>{opponentName}</p>
@@ -95,7 +149,7 @@ const ViewGamePage = () => {
               </div>
             </div>
           </div>
-          <button className='bg-blue-500 text-white py-2 px-4 rounded mt-4' onClick={handleBackToProfile}>
+          <button className='bg-blue-500 text-white py-2 px-4 rounded mt-4' onClick={() => navigate('/profile')}>
             Back to Profile
           </button>
         </div>

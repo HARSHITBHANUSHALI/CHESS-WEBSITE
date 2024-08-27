@@ -11,7 +11,10 @@ export default {
         green:'#739552',
         darkgrey: '#262522',
         highlight:'#f5f682'
-      }
+      },
+      fontFamily:{
+        ams:["New Amsterdam", "sans-serif"],
+      },
     },
   },
   plugins: [],

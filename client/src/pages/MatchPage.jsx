@@ -3,9 +3,10 @@ import ChessBoard from '../components/ChessBoard';
 import { useChess } from '../ChessContext';
 import Chat from '../components/Chat';
 import {useNavigate} from 'react-router-dom';
+import {motion,AnimatePresence} from 'framer-motion';
 
 const MatchPage = () => {
-  const { user, room, socket, opponent, inRoom, turn, grid, userSide, totalMoves, piece, letters,winner,setWinner } = useChess();
+  const { user, room, socket, opponent, inRoom, turn, grid, userSide, totalMoves, piece, letters,winner,setWinner,setOpponent } = useChess();
   const movesContainerRef = useRef(null);
   const navigate = useNavigate();
 
@@ -25,14 +26,74 @@ const MatchPage = () => {
   const handleBackToHome = () => {
       navigate('/');
       setWinner(null);
+      setOpponent(null);
   };
 
   const handleLeaveRoom = ()=>{
     socket.emit('leaveRoom',{user,room});
   }
+
+  const waitingVariants={
+    hidden:{
+        opacity:0,
+        y:'-100vh'
+    },
+    visible:{
+        opacity:1,
+        y:0,
+        transition:{type:'spring', damping:40,ease:'easeIn'}
+
+    },
+    exit:{
+        x:0,    
+        opacity:0,    
+        transition:{duration:0.5,ease:'easeOut'}
+    }
+  }
+
+  const matchVariants = {
+    hidden: {
+      opacity: 0,
+      y: '100vh'
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: 'spring', damping: 40, ease: 'easeIn' }
+    }
+  };
   return (
       <>
-        <div className='main h-screen bg-gray-900 text-white overflow-auto p-4'>
+        <div className='main h-screen bg-gray-900 text-white overflow-auto'>
+            <AnimatePresence mode='wait'>
+            {opponent===null && (
+                <motion.div 
+                    className='bg-black opacity-50 absolute h-full w-full flex justify-center items-center'
+                    variants={waitingVariants}
+                    key='waiting'
+                    initial='hidden'
+                    animate='visible'
+                    exit='exit'
+                >
+                    <div className='text-3xl flex flex-col gap-4 justify-center items-center w-1/3 h-1/2 bg-[#262522] rounded-xl'>
+                        WAITING FOR THE OPPONENT
+                        <motion.div 
+                            className='rounded-full h-3 w-3 bg-white'
+                            animate={{x:[-30,30]}} 
+                            transition={{repeat:Infinity, repeatType:'reverse', duration:0.5,ease:'linear'}}
+                        ></motion.div>
+                    </div>
+                </motion.div>
+            )}
+            
+            {opponent!==null && (
+            <motion.div 
+                className='m-4'
+                variants={matchVariants}
+                key='match'
+                initial='hidden'
+                animate='visible'
+            >
             <div className='flex justify-center text-2xl font-semibold mb-4'>
                 {turn === 1 ? 'White\'s Turn' : 'Black\'s Turn'}
             </div>
@@ -84,6 +145,9 @@ const MatchPage = () => {
                     </div>
                 </div>
             </div>
+            </motion.div>
+            )}
+            </AnimatePresence>
             {winner && (
                 <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50'>
                     <div className='bg-[rgb(28,27,25)] w-2/5 p-8 rounded-lg shadow-lg text-center'>

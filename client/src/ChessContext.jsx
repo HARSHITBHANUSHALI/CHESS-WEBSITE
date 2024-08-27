@@ -12,7 +12,7 @@ export const ChessProvider = ({ children }) => {
 
     const [chatMsg, setChatMsg] = useState('');
     const [chatMessages, setChatMessages] = useState([]);
-
+    const [isLoggedIn,setIsLoggedIn] = useState(false);
     const [socket, setSocket] = useState(null);
     const [message, setMessage] = useState('');
     const [board, setBoard] = useState(null);
@@ -33,6 +33,17 @@ export const ChessProvider = ({ children }) => {
         ['wp', 'wp', 'wp', 'wp', 'wp', 'wp', 'wp', 'wp'],
         ['wr', 'wn', 'wb', 'wq', 'wk', 'wb', 'wn', 'wr']
     ]);
+
+    const startGrid = [
+        ['br', 'bn', 'bb', 'bq', 'bk', 'bb', 'bn', 'br'],
+        ['bp', 'bp', 'bp', 'bp', 'bp', 'bp', 'bp', 'bp'],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['wp', 'wp', 'wp', 'wp', 'wp', 'wp', 'wp', 'wp'],
+        ['wr', 'wn', 'wb', 'wq', 'wk', 'wb', 'wn', 'wr']
+    ];
 
     const [winner, setWinner] = useState(null);
 
@@ -81,6 +92,10 @@ export const ChessProvider = ({ children }) => {
             if (success) {
                 setInRoom(true);
                 setUserSide(userSide);
+                setGrid(startGrid);
+                setTotalMoves([]);
+                setChatMessages([]);
+                setTurn(1);
                 if(noOfUsers===2){
                   setLock(false);
                 }
@@ -142,7 +157,7 @@ export const ChessProvider = ({ children }) => {
             socket, message, board, setBoard, room, setRoom, joinRoom,
             inRoom, userSide, turn, setTurn, lock, setLock,
             totalMoves, setTotalMoves, grid, setGrid, setUserSide, letters, piece,
-            chatMsg,setChatMsg,chatMessages,setChatMessages, winner, setWinner
+            chatMsg,setChatMsg,chatMessages,setChatMessages, winner, setWinner, startGrid, isLoggedIn, setIsLoggedIn
         }}>
             {children}
         </ChessContext.Provider>

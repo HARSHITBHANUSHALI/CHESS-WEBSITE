@@ -1,12 +1,11 @@
 import '../index.css';
-import { useChess } from '../ChessContext';
 
-const Board = ({grid, boxColor, piece, isValidMove }) => {
+const Board = ({grid=[], boxColor, piece, isValidMove }) => {
   
   console.log(grid);
 
-  if (!grid) {
-    return <div>Loading...</div>; // Or handle the loading state appropriately
+  if (!grid || !Array.isArray(grid) || grid.length == 0) {
+    return <div>Loading or invalid grid data...</div>;
   }
 
   return (

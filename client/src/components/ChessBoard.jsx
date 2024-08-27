@@ -343,7 +343,6 @@ const ChessBoard = () => {
       }
     }
   };
-
   const validatePawnMove = (start, end) => {
     if (start.cell === 'bp') {
       if ((end.cellIndex === start.cellIndex && end.rowIndex === start.rowIndex + 1 && end.cell === '') ||
@@ -360,37 +359,47 @@ const ChessBoard = () => {
     }
     return false;
   };
-
+  
   const validateKnightMove = (start, end) => {
+    if (!['wn', 'bn'].includes(start.cell)) return false;
     if ((Math.abs(start.cellIndex - end.cellIndex) === 2 && Math.abs(start.rowIndex - end.rowIndex) === 1) ||
         (Math.abs(start.cellIndex - end.cellIndex) === 1 && Math.abs(start.rowIndex - end.rowIndex) === 2)) {
       return !isSameSidePiece(start, end);
     }
     return false;
   };
-
+  
   const validateBishopMove = (start, end) => {
+    if (!['wb', 'bb'].includes(start.cell)) return false;
     if (Math.abs(start.cellIndex - end.cellIndex) === Math.abs(start.rowIndex - end.rowIndex)) {
       return !isSameSidePiece(start, end) && isPathClear(start, end);
     }
     return false;
   };
-
+  
   const validateRookMove = (start, end) => {
+    if (!['wr', 'br'].includes(start.cell)) return false;
     if (start.cellIndex === end.cellIndex || start.rowIndex === end.rowIndex) {
       return !isSameSidePiece(start, end) && isPathClear(start, end);
     }
     return false;
   };
-
+  
   const validateQueenMove = (start, end) => {
-    if (validateBishopMove(start, end) || validateRookMove(start, end)) {
-      return true;
+    if ((start.cell === 'bq' || start.cell === 'wq') && 
+        !isSameSidePiece(start, end) &&
+        ((start.cellIndex + start.rowIndex === end.cellIndex + end.rowIndex) || 
+         (7 - start.cellIndex + start.rowIndex === 7 - end.cellIndex + end.rowIndex) || 
+         (start.cellIndex === end.cellIndex) || 
+         (start.rowIndex === end.rowIndex))) {
+      return isPathClear(start, end);
     }
     return false;
   };
-
+  
+  
   const validateKingMove = (start, end) => {
+    if (!['wk', 'bk'].includes(start.cell)) return false;
     if (Math.abs(start.cellIndex - end.cellIndex) <= 1 && Math.abs(start.rowIndex - end.rowIndex) <= 1) {
       return !isSameSidePiece(start, end);
     }
@@ -427,7 +436,7 @@ const ChessBoard = () => {
   };
 
   return (
-    <div className='flex justify-center py-5'>
+    <div className='flex justify-center items-center py-5'>
       <Board grid={grid} boxColor={boxColor} piece={piece} isValidMove={isValidMove} />
       {pawnPromo && win===3 && isWpp && (
         <div className='absolute w-1/4 bg-[hsl(40deg_2.56%_22.94%)] opacity-90 flex gap-2 rounded-xl'>

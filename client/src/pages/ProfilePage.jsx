@@ -23,7 +23,7 @@ const ProfilePage = () => {
     }, [user]);
 
     if (!user) {
-        return <div>Loading...</div>;
+        navigate('/login');
     }
 
     async function handleAddPhoto(e) {

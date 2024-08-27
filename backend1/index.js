@@ -68,10 +68,12 @@ const roomManager = {
                 if (room.players.length === 0) {
                     delete this.rooms[roomName];
                     await Room.deleteOne({ roomId: roomName });
+                    console.log(`Room ${roomName} deleted because it is empty.`);
                 } else {
                     room.updatedAt = Date.now();
                     await room.save();
                     this.rooms[roomName] = room;
+
                 }
             }
         } catch (error) {
@@ -274,6 +276,10 @@ mongoose.connection.once('open', () => {
                     }
                     await roomManager.removeUserFromRoom(room, user._id.toString());
                     socket.leave(room);
+
+                    await Room.deleteOne({ roomId: room });
+                    delete roomManager.rooms[room];
+                    console.log(`Room ${room} deleted after user left.`);
                 }
             } catch (error) {
                 console.error('Error leaving room:', error);
@@ -297,6 +303,10 @@ mongoose.connection.once('open', () => {
                     }
                     await roomManager.removeUserFromRoom(room, user._id.toString());
                     socket.leave(room);
+
+                    await Room.deleteOne({ roomId: room });
+                    delete roomManager.rooms[room];
+                    console.log(`Room ${room} deleted after user left.`);
                 }
             } catch (error) {
                 console.error('Error leaving room:', error);
