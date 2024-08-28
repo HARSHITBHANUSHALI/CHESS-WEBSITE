@@ -14,7 +14,13 @@ const handleSignUp = async(req,res)=>{
         const result = await User.create({
             username,email,password:hashedPassword
         });
-        res.status(200).json(result);
+
+        const userResponse = {
+            _id: result._id,
+            username: result.username,
+            email: result.email
+        };
+        res.status(200).json(userResponse);
     }catch(err){
         res.status(500).json({'message':err.message});
     }

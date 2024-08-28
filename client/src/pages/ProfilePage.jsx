@@ -10,7 +10,9 @@ const ProfilePage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (user) {
+        if (!user){
+            navigate('/login');
+        } else {
             axios.get(`/api/users/${user._id}/games`).then(response => {
                 console.log(response.data);
                 setGames(response.data);
@@ -22,8 +24,8 @@ const ProfilePage = () => {
         }
     }, [user]);
 
-    if (!user) {
-        navigate('/login');
+    if(!user){
+        return null;
     }
 
     async function handleAddPhoto(e) {

@@ -2,12 +2,11 @@ import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import { useChess } from '../ChessContext';
-import Cookies from 'js-cookie'; 
 
 const LoginPage = () => {
     const {user,setUser,isLoggedIn,setIsLoggedIn} = useChess();
     const [username,setUsername]=useState('');
-    
+    const loggedIn = sessionStorage.getItem('isLoggedIn');
     const [showPassword,setShowPassword] = useState(false);
     const [password,setPassword] = useState('');
     const togglePasswordVisibility = () => {
@@ -24,6 +23,7 @@ const LoginPage = () => {
            alert('Login Successful');
            navigate('/');
            setIsLoggedIn(true);
+           sessionStorage.setItem('isLoggedIn', 'true');
         }catch(err){
             console.error(err);
             alert('Login Failed');
@@ -34,15 +34,24 @@ const LoginPage = () => {
       setUser(null);
       setIsLoggedIn(false);
       localStorage.clear();
-      Cookies.remove('jwt');
+      sessionStorage.removeItem('isLoggedIn');
+      axios.post('/logout');
       navigate('/login');
     }
   return (
     
     <div className='main h-screen flex flex-col items-center'>
+      <div className='flex gap-2 items-center z-20 absolute left-2 top-2'>
+          <Link to='/'>
+              <img src="/backarrow.svg" className='w-10 z-20' alt="" />
+          </Link>
+          <Link to='/'>
+              <div className='text-lg z-20'>Back to Home</div>
+          </Link>
+      </div>
       <img src="/background.png" className='h-full w-full fixed' alt="" />
       <img src="/chesslogo.png" className='w-1/6' alt="" />
-      {isLoggedIn?(<>
+      {(isLoggedIn||loggedIn)?(<>
           <div className='flex flex-col justify-between bg-[#262421] z-10 rounded-xl w-1/4 h-1/3 overflow-hidden p-5 text-center'>
               <div className='text-5xl font-ams'>
                 <div>Hey!!!</div>

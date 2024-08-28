@@ -35,6 +35,14 @@ const SignupPage = () => {
     // },[])
   return (
     <div className='main h-screen flex justify-center'>
+        <div className='flex gap-2 items-center z-20 absolute left-2 top-2'>
+          <Link to='/'>
+              <img src="/backarrow.svg" className='w-10 z-20' alt="" />
+          </Link>
+          <Link to='/'>
+              <div className='text-lg z-20'>Back to Home</div>
+          </Link>
+        </div>
         <div className='xl:w-1/3 sm:w-2/3 flex flex-col items-center'>
             <img src="/chesslogo.png" className='w-1/3' alt="" />
             {!showForm && (

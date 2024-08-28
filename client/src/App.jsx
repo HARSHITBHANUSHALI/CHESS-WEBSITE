@@ -25,6 +25,7 @@ function App() {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/profile' element={<ProfilePage />} />
         <Route path='/game/:id' element={<ViewGamePage />} />
+        <Route path='*' element={<Home />} />
       </Routes>
     </ChessProvider>
   );

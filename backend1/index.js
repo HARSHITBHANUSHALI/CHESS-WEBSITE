@@ -14,6 +14,7 @@ const cookieParser = require('cookie-parser');
 const User = require('./models/User');
 const Game = require('./models/Game');
 const Room = require('./models/Room');
+const verifyJWT = require('./middleware/verifyJwt');
 
 connectDB();
 
@@ -26,6 +27,9 @@ app.use(express.json());
 app.use('/signup', require('./routes/register'));
 app.use('/login', require('./routes/auth'));
 app.use('/logout', require('./routes/logout'));
+
+app.use(verifyJWT);
+
 app.use('/profile', require('./routes/profile'));
 app.use('/uploadPhoto', require('./routes/uploadPhoto'));
 app.use('/api', require('./routes/games'));
@@ -291,6 +295,7 @@ mongoose.connection.once('open', () => {
                 const roomDoc = await Room.findOne({ roomId: room }).populate('players.userId');
                 if (roomDoc) {
                     const opponent = roomManager.getOpponent(room, user.username);
+        
                     if (opponent) {
                         const winner = {
                             winnerName: opponent.username,
@@ -298,12 +303,38 @@ mongoose.connection.once('open', () => {
                             loserName: user.username,
                             loserPhoto: user.photos?.length > 0 ? 'http://localhost:3500/uploads/' + user.photos[0] : '/user.svg'
                         };
-
+        
                         io.to(room).emit('gameOver', winner);
+        
+                        const gameDoc = await Game.findById(roomDoc.game);
+                        if (gameDoc) {
+                            gameDoc.result = opponent.username; 
+                            await gameDoc.save();
+        
+                            const player1 = await User.findById(gameDoc.players[0].userId);
+                            const player2 = await User.findById(gameDoc.players[1].userId);
+        
+                            player1.stats.gamesPlayed += 1;
+                            player2.stats.gamesPlayed += 1;
+                            player1.games.push(gameDoc._id);
+                            player2.games.push(gameDoc._id);
+        
+                            if (opponent.username === player1.username) {
+                                player1.stats.gamesWon += 1;
+                                player2.stats.gamesLost += 1;
+                            } else {
+                                player1.stats.gamesLost += 1;
+                                player2.stats.gamesWon += 1;
+                            }
+        
+                            await player1.save();
+                            await player2.save();
+                        }
                     }
+        
                     await roomManager.removeUserFromRoom(room, user._id.toString());
                     socket.leave(room);
-
+        
                     await Room.deleteOne({ roomId: room });
                     delete roomManager.rooms[room];
                     console.log(`Room ${room} deleted after user left.`);
@@ -312,6 +343,7 @@ mongoose.connection.once('open', () => {
                 console.error('Error leaving room:', error);
             }
         });
+        
 
         socket.on('disconnect', async () => {
             try {

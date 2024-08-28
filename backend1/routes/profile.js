@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 router.get('/', async (req, res) => {
-    const token = req.cookies.jwt; // Assuming the JWT is stored in a cookie named 'jwt'
+    const token = req.cookies.jwt; 
     if (token) {
         jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, async (err, userData) => {
             if (err) return res.status(403).json({ message: 'Invalid token' });

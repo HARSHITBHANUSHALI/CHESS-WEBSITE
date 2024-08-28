@@ -30,7 +30,9 @@ const handleLogin = async(req,res)=>{
             foundUser.refreshToken=refreshToken;
             const result = await foundUser.save();
 
-            res.cookie('jwt',refreshToken,{httpOnly:true,sameSite:'None'}).json(result);
+            const {password,...userResponse} = foundUser.toObject();
+
+            res.cookie('jwt',refreshToken,{httpOnly:true,sameSite:'None',secure:true}).json(userResponse);
         }catch(err){
             res.status(500).json({'message':err.message});
         }

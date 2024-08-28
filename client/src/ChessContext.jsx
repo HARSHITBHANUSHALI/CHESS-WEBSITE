@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import io from "socket.io-client";
 import axios from "axios";
+import Cookies from 'js-cookie';
 
 const ChessContext = createContext();
 export const useChess = () => useContext(ChessContext);
@@ -70,25 +71,31 @@ export const ChessProvider = ({ children }) => {
     useEffect(() => {
         const newSocket = io('http://localhost:3500');
         setSocket(newSocket);
-
+    
         const savedUser = localStorage.getItem('user');
-        if (savedUser) {
+        const token = Cookies.get('jwt');
+        const loggedIn = sessionStorage.getItem('isLoggedIn');
+
+        if (savedUser && token && loggedIn==='true') {
             setUser(JSON.parse(savedUser));
+            setIsLoggedIn(true);
             setReady(true);
-        } else {
+        }else {
             axios.get('/profile').then(({ data }) => {
                 setUser(data);
                 localStorage.setItem('user', JSON.stringify(data));
+                sessionStorage.setItem('isLoggedIn', 'true');
+                setIsLoggedIn(true);
                 setReady(true);
             });
         }
-
+    
         newSocket.on('message', (msg) => {
             console.log(msg);
             setMessage(msg);
         });
-
-        newSocket.on('roomJoined', ({ success, message, room, userSide,noOfUsers }) => {
+    
+        newSocket.on('roomJoined', ({ success, message, room, userSide, noOfUsers }) => {
             if (success) {
                 setInRoom(true);
                 setUserSide(userSide);
@@ -96,8 +103,8 @@ export const ChessProvider = ({ children }) => {
                 setTotalMoves([]);
                 setChatMessages([]);
                 setTurn(1);
-                if(noOfUsers===2){
-                  setLock(false);
+                if (noOfUsers === 2) {
+                    setLock(false);
                 }
                 console.log(`Successfully joined Room: ${room} with userSide ${userSide}`);
             } else {
@@ -105,7 +112,7 @@ export const ChessProvider = ({ children }) => {
                 console.log(`Failed to join Room: ${message}`);
             }
         });
-
+    
         newSocket.on('grid', ({ grid, turn, win, move }) => {
             setGrid(grid);
             setTotalMoves(prevTotalMoves => [...prevTotalMoves, move]);
@@ -115,30 +122,31 @@ export const ChessProvider = ({ children }) => {
                 setLock(true);
             }
         });
-
+    
         newSocket.on('OpponentDetails', ({ user, socketId }) => {
             setOpponent(user);
             setLock(false);
             console.log(lock);
         });
-
+    
         newSocket.on('chatMsg', (data) => {
-            const {name,text,time} = data; 
-            setChatMessages((prevMessages) => [...prevMessages, {name,text,time}]);
+            const { name, text, time } = data;
+            setChatMessages((prevMessages) => [...prevMessages, { name, text, time }]);
         });
-      
+    
         newSocket.on('activity', (name) => {
-        setActivity(name ? `${name} is typing...` : null);
+            setActivity(name ? `${name} is typing...` : null);
         });
-
+    
         newSocket.on('gameOver', (data) => {
             setWinner(data);
         });
-
+    
         return () => {
             newSocket.disconnect();
         };
     }, []);
+    
 
     const updateUser = (newUser) => {
         setUser(newUser);
