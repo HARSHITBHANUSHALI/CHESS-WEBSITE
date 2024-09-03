@@ -81,9 +81,11 @@ export const ChessProvider = ({ children }) => {
             setIsLoggedIn(true);
             setReady(true);
         }else {
-            axios.get('/profile').then(({ data }) => {
-                setUser(data);
-                localStorage.setItem('user', JSON.stringify(data));
+            axios.get('/profile').then(({data}) => {
+                const {pwd,...userData} = data;
+                console.log(userData);
+                setUser(userData);
+                localStorage.setItem('user', JSON.stringify(userData));
                 sessionStorage.setItem('isLoggedIn', 'true');
                 setIsLoggedIn(true);
                 setReady(true);

@@ -14,7 +14,7 @@ const cookieParser = require('cookie-parser');
 const User = require('./models/User');
 const Game = require('./models/Game');
 const Room = require('./models/Room');
-const verifyJWT = require('./middleware/verifyJwt');
+const verifyJwt = require('./middleware/verifyJwt');
 
 connectDB();
 
@@ -28,7 +28,7 @@ app.use('/signup', require('./routes/register'));
 app.use('/login', require('./routes/auth'));
 app.use('/logout', require('./routes/logout'));
 
-app.use(verifyJWT);
+app.use(verifyJwt);
 
 app.use('/profile', require('./routes/profile'));
 app.use('/uploadPhoto', require('./routes/uploadPhoto'));

@@ -57,7 +57,7 @@ const ProfilePage = () => {
                 <div>
                     <div className='flex mt-4 ml-10 mr-10 p-8 bg-[rgb(38,37,34)]'>
                         <div className='relative'>
-                            <img src={user.photos.length > 0 ? `http://localhost:3500/uploads/${user.photos[0]}` : '/profilePic.webp'} className='w-40' alt="" />
+                            <img src={user.photos?.length > 0 ? `http://localhost:3500/uploads/${user.photos[0]}` : '/profilePic.webp'} className='w-40' alt="" />
                             <label className='bg-white opacity-70 text-black flex absolute bottom-0 w-full justify-center gap-2'>
                                 <input type="file" className='hidden' onChange={handleAddPhoto} />
                                 <img src="/camera.svg" alt="" />

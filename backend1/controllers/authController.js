@@ -12,19 +12,10 @@ const handleLogin = async(req,res)=>{
     const match = await bcrypt.compare(password,foundUser.password);
     if(match){
         try{
-            const accessToken = jwt.sign(
-                {
-                    "username":foundUser.username,
-                    "email":foundUser.email,
-                    "id":foundUser._id
-                },
-                process.env.ACCESS_TOKEN_SECRET,
-                {expiresIn:'2m'}
-            );
             const refreshToken = jwt.sign(
-                {"username":foundUser.username,"email":foundUser.email,"id":foundUser._id},
+                {"username":foundUser.username,"email":foundUser.email,"id":foundUser._id,"photos":foundUser.photos},
                 process.env.REFRESH_TOKEN_SECRET,
-                {expiresIn:'1d'}
+                {expiresIn:'2d'}
             );
 
             foundUser.refreshToken=refreshToken;

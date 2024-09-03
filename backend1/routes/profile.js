@@ -15,8 +15,10 @@ router.get('/', async (req, res) => {
                     return res.status(404).json({ message: 'User not found' });
                 }
                 
-                const { username, email, _id } = user;
-                res.json({ username, email, _id });
+                const { password,...userInfo } = user;
+                const {_doc} = userInfo;
+                console.log(_doc);
+                res.json(_doc);
             } catch (err) {
                 res.status(500).json({ message: err.message });
             }
