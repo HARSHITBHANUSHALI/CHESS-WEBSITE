@@ -119,7 +119,7 @@ const MatchPage = () => {
                                     <div className='flex flex-col flex-grow items-center bg-[#262522] rounded-lg m-4 overflow-hidden'>
                                         <div className='flex items-start gap-4 p-4 w-full bg-[rgb(28,27,25)] rounded-t-lg'>
                                             <img
-                                                src={user?.photos?.length > 0 ? 'http://localhost:3500/uploads/' + user?.photos[0] : '/user.svg'}
+                                                src={user?.photos?.length > 0 ? 'https://chess-website-zs36.onrender.com/uploads/' + user?.photos[0] : '/user.svg'}
                                                 alt="User"
                                                 className='w-16 h-16 p-2 rounded-full border-2 border-gray-700'
                                             />
@@ -149,7 +149,7 @@ const MatchPage = () => {
                                         </div>
                                         <div className='mt-4 flex items-start gap-4 p-4 w-full bg-[rgb(28,27,25)] rounded-b-lg'>
                                             <img
-                                                src={opponent?.photos?.length > 0 ? 'http://localhost:3500/uploads/' + opponent?.photos[0] : '/user.svg'}
+                                                src={opponent?.photos?.length > 0 ? 'https://chess-website-zs36.onrender.com/uploads/' + opponent?.photos[0] : '/user.svg'}
                                                 alt="Opponent"
                                                 className='w-16 h-16 rounded-full border-2 border-gray-700 p-2'
                                             />
@@ -206,7 +206,7 @@ const MatchPage = () => {
                                 <div className='text-center'>
                                     <div className='flex items-center gap-4'>
                                         <img
-                                            src={user?.photos?.length > 0 ? 'http://localhost:3500/uploads/' + user?.photos[0] : '/user.svg'}
+                                            src={user?.photos?.length > 0 ? 'https://chess-website-zs36.onrender.com/uploads/' + user?.photos[0] : '/user.svg'}
                                             alt="User"
                                             className='w-16 h-16 rounded-full border-2 border-gray-700 p-2'
                                         />
@@ -221,7 +221,7 @@ const MatchPage = () => {
                                 <div className='text-center'>
                                     <div className='flex items-center gap-4'>
                                         <img
-                                            src={opponent?.photos?.length > 0 ? 'http://localhost:3500/uploads/' + opponent?.photos[0] : '/user.svg'}
+                                            src={opponent?.photos?.length > 0 ? 'https://chess-website-zs36.onrender.com/uploads/' + opponent?.photos[0] : '/user.svg'}
                                             alt="Opponent"
                                             className='w-16 h-16 rounded-full border-2 border-gray-700 p-2'
                                         />

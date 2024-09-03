@@ -107,7 +107,7 @@ mongoose.connection.once('open', () => {
     const io = new Server(expressServer, {
         cors: {
             credentials: true,
-            origin: process.env.NODE_ENV === 'production' ? false : ["http://localhost:5173"]
+            origin: process.env.NODE_ENV === 'production' ? 'https://chess-website-one.vercel.app' : ["http://localhost:5173"]
         }
     });
 
