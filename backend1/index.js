@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const { Server } = require('socket.io');
-const PORT = process.env.PORT || 3500;
+const PORT = process.env.PORT || 80;
 const mongoose = require('mongoose');
 const connectDB = require('./config/dbConn');
 const credentials = require('./middleware/credentials');
@@ -239,9 +239,9 @@ mongoose.connection.once('open', () => {
                     if (opponent) {
                         const winner = {
                             winnerName: user.username,
-                            winnerPhoto: user.photos?.length > 0 ? 'http://localhost:3500/uploads/' + user.photos[0] : '/user.svg',
+                            winnerPhoto: user.photos?.length > 0 ? 'https://chess-website-zs36.onrender.com/uploads/' + user.photos[0] : '/user.svg',
                             loserName: opponent.username,
-                            loserPhoto: opponent.photos?.length > 0 ? 'http://localhost:3500/uploads/' + opponent.photos[0] : '/user.svg'
+                            loserPhoto: opponent.photos?.length > 0 ? 'https://chess-website-zs36.onrender.com/uploads/' + opponent.photos[0] : '/user.svg'
                         };
 
                         io.to(room).emit('gameOver', winner);
@@ -299,9 +299,9 @@ mongoose.connection.once('open', () => {
                     if (opponent) {
                         const winner = {
                             winnerName: opponent.username,
-                            winnerPhoto: opponent.photos?.length > 0 ? 'http://localhost:3500/uploads/' + opponent.photos[0] : '/user.svg',
+                            winnerPhoto: opponent.photos?.length > 0 ? 'https://chess-website-zs36.onrender.com/uploads/' + opponent.photos[0] : '/user.svg',
                             loserName: user.username,
-                            loserPhoto: user.photos?.length > 0 ? 'http://localhost:3500/uploads/' + user.photos[0] : '/user.svg'
+                            loserPhoto: user.photos?.length > 0 ? 'https://chess-website-zs36.onrender.com/uploads/' + user.photos[0] : '/user.svg'
                         };
         
                         io.to(room).emit('gameOver', winner);

@@ -69,7 +69,7 @@ export const ChessProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        const newSocket = io('https://chess-website-zs36.onrender.com:3500');
+        const newSocket = io('https://chess-website-zs36.onrender.com');
         setSocket(newSocket);
     
         const savedUser = localStorage.getItem('user');
