@@ -69,7 +69,7 @@ export const ChessProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        const newSocket = io('http://localhost:3500');
+        const newSocket = io('https://chess-website-one.vercel.app:3500');
         setSocket(newSocket);
     
         const savedUser = localStorage.getItem('user');
