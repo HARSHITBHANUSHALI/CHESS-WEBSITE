@@ -12,7 +12,7 @@ import ProfilePage from './pages/ProfilePage';
 import ViewGamePage from './pages/ViewGamePage';
 import axios from 'axios';
 
-axios.defaults.baseURL = "http://localhost:3500";
+axios.defaults.baseURL = "https://chess-website-zs36.onrender.com";
 axios.defaults.withCredentials = true;
 
 function App() {
