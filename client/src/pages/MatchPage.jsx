@@ -202,33 +202,34 @@ const MatchPage = () => {
                             <h2 className='text-4xl font-bold mb-4'>
                                 {user.username === winner.winnerName ? 'You Win!' : `${winner.winnerName} Wins!`}
                             </h2>
-                            <div className='flex items-center justify-around mb-4'>
-                                <div className='text-center'>
-                                    <div className='flex items-center gap-4'>
-                                        <img
-                                            src={user?.photos?.length > 0 ? 'https://chess-website-zs36.onrender.com/uploads/' + user?.photos[0] : '/user.svg'}
-                                            alt="User"
-                                            className='w-16 h-16 rounded-full border-2 border-gray-700 p-2'
-                                        />
-                                        <p className='text-3xl'>{user.username}</p>
-                                    </div>
-                                </div>
-                                <div className='flex text-4xl gap-4'>
-                                    <div>{user.username === winner.winnerName ? '1' : '0'}</div>
-                                    <p>-</p>
-                                    <div>{opponentName === winner.winnerName ? '1' : '0'}</div>
-                                </div>
-                                <div className='text-center'>
-                                    <div className='flex items-center gap-4'>
-                                        <img
-                                            src={opponent?.photos?.length > 0 ? 'https://chess-website-zs36.onrender.com/uploads/' + opponent?.photos[0] : '/user.svg'}
-                                            alt="Opponent"
-                                            className='w-16 h-16 rounded-full border-2 border-gray-700 p-2'
-                                        />
-                                        <p className='text-3xl'>{opponentName}</p>
-                                    </div>
-                                </div>
-                            </div>
+                            <div className='flex flex-col md:flex-row items-center justify-around mb-4'>
+    <div className='text-center mb-4 md:mb-0'>
+        <div className='flex items-center gap-4'>
+            <img
+                src={user?.photos?.length > 0 ? 'https://chess-website-zs36.onrender.com/uploads/' + user?.photos[0] : '/user.svg'}
+                alt="User"
+                className='w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-gray-700 p-2'
+            />
+            <p className='text-2xl md:text-3xl'>{user.username}</p>
+        </div>
+    </div>
+    <div className='flex text-3xl md:text-4xl gap-4 mb-4 md:mb-0'>
+        <div>{user.username === winner.winnerName ? '1' : '0'}</div>
+        <p>-</p>
+        <div>{opponentName === winner.winnerName ? '1' : '0'}</div>
+    </div>
+    <div className='text-center mb-4 md:mb-0'>
+        <div className='flex items-center gap-4'>
+            <img
+                src={opponent?.photos?.length > 0 ? 'https://chess-website-zs36.onrender.com/uploads/' + opponent?.photos[0] : '/user.svg'}
+                alt="Opponent"
+                className='w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-gray-700 p-2'
+            />
+            <p className='text-2xl md:text-3xl'>{opponentName}</p>
+        </div>
+    </div>
+</div>
+
                             
                             <button
                                 onClick={handleBackToHome}
