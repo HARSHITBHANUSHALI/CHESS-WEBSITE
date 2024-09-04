@@ -108,20 +108,20 @@ const MatchPage = () => {
                             <div className='text-xl md:text-2xl font-semibold mb-4 text-center'>
                                 {turn === 1 ? 'White\'s Turn' : 'Black\'s Turn'}
                             </div>
-                            <div className='flex flex-col md:flex-row h-[80vh] md:h-[85vh]'>
-                                <div className='flex-1 md:w-1/4 p-2'>
+                            <div className='flex flex-col md:flex-row h-[80vh]'>
+                                <div className='flex-1 p-2 md:w-1/4'>
                                     <Chat />
                                 </div>
-                                <div className='flex-1 md:w-1/2 flex justify-center p-2'>
+                                <div className='flex-1 p-2 md:w-1/2 flex justify-center'>
                                     <ChessBoard />
                                 </div>
-                                <div className='flex-1 md:w-1/4 p-2'>
-                                    <div className='flex flex-col flex-grow items-center bg-[#262522] rounded-lg overflow-hidden'>
+                                <div className='flex-1 p-2 md:w-1/4'>
+                                    <div className='flex flex-col items-center bg-[#262522] rounded-lg overflow-hidden'>
                                         <div className='flex items-start gap-4 p-4 w-full bg-[rgb(28,27,25)] rounded-t-lg'>
                                             <img
                                                 src={user?.photos?.length > 0 ? 'https://chess-website-zs36.onrender.com/uploads/' + user?.photos[0] : '/user.svg'}
                                                 alt="User"
-                                                className='w-12 h-12 md:w-16 md:h-16 p-2 rounded-full border-2 border-gray-700'
+                                                className='w-12 h-12 p-2 rounded-full border-2 border-gray-700'
                                             />
                                             <div>
                                                 <p className='text-lg md:text-xl font-bold'>{user?.username || 'Guest'}</p>
@@ -139,7 +139,7 @@ const MatchPage = () => {
                                                                 <span className='text-sm'>{index / 2 + 1}</span>
                                                             )}
                                                             <div className='flex items-center'>
-                                                                <img className='h-5 md:h-6' src={piece(move.start.cell)} alt="" />
+                                                                <img className='h-5' src={piece(move.start.cell)} alt="" />
                                                                 {`(${letters[move.end.cellIndex]}${8 - move.end.rowIndex})`}
                                                             </div>
                                                         </li>
@@ -151,7 +151,7 @@ const MatchPage = () => {
                                             <img
                                                 src={opponent?.photos?.length > 0 ? 'https://chess-website-zs36.onrender.com/uploads/' + opponent?.photos[0] : '/user.svg'}
                                                 alt="Opponent"
-                                                className='w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-gray-700 p-2'
+                                                className='w-12 h-12 rounded-full border-2 border-gray-700 p-2'
                                             />
                                             <div>
                                                 <p className='text-lg md:text-xl font-bold'>{opponentName}</p>
