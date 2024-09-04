@@ -43,26 +43,26 @@ const LoginPage = () => {
     <div className='main h-screen flex flex-col items-center'>
       <div className='flex gap-2 items-center z-20 absolute left-2 top-2'>
           <Link to='/'>
-              <img src="/backarrow.svg" className='w-10 z-20' alt="" />
+              <img src="/backarrow.svg" className='w-10 z-20 md:w-10' alt="" />
           </Link>
           <Link to='/'>
-              <div className='text-lg z-20'>Back to Home</div>
+              <div className='text-sm md:text-lg z-20'>Back to Home</div>
           </Link>
       </div>
-      <img src="/background.png" className='h-full w-full fixed' alt="" />
-      <img src="/chesslogo.png" className='w-1/6' alt="" />
+      <img src="/background.png" className='h-full w-full fixed object-cover' alt="" />
+      <img src="/chesslogo.png" className='w-2/6 md:w-1/6' alt="" />
       {(isLoggedIn||loggedIn)?(<>
-          <div className='flex flex-col justify-between bg-[#262421] z-10 rounded-xl w-1/4 h-1/3 overflow-hidden p-5 text-center'>
-              <div className='text-5xl font-ams'>
+          <div className='flex flex-col justify-between bg-[#262421] z-10 rounded-xl w-full sm:w-3/4 md:w-1/2 lg:w-1/4 h-1/3 overflow-hidden p-5 text-center'>
+              <div className='text-3xl md:text-5xl font-ams'>
                 <div>Hey!!!</div>
                 <div>Your are Logged In!</div>
               </div>
               <span className='text-3xl '></span>
-              <button onClick={handleLogout} className='rounded-lg py-4 border-b-4 border-[#45753c] login w-full leading-6 text-2xl font-extrabold font-[Montserrat,sans-serif]'>Log Out</button>
+              <button onClick={handleLogout} className='rounded-lg py-2 md:py-4 border-b-4 border-[#45753c] login w-full leading-6 text-lg md:text-2xl font-extrabold font-[Montserrat,sans-serif]'>Log Out</button>
           </div>
           </>
         ):(        
-        <div className='bg-[#262421] z-10 rounded-xl w-1/4 overflow-hidden'>
+        <div className='bg-[#262421] z-10 rounded-xl w-5/6 sm:w-3/4 md:w-1/2 lg:w-2/4 xl:w-1/4 overflow-hidden'>
           <form className='flex flex-col gap-6 mx-8 my-20' onSubmit={handleSubmit}>
               <div className='flex bg-[rgb(60,59,57)] gap-4 rounded-xl overflow-hidden px-4 hover:outline focus-within:outline outline-1 outline-slate-200'>
                   <img src="/user.svg" alt="" />

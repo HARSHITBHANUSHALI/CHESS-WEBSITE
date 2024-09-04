@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useChess } from '../ChessContext';
 import Board from '../components/Board';
-import Chat from '../components/Chat';
 
 const ViewGamePage = () => {
   const location = useLocation();
@@ -45,7 +44,6 @@ const ViewGamePage = () => {
 
     let newBoardState = JSON.parse(game.gameState);
 
-    // Apply moves up to the current index
     for (let i = 0; i <= index; i++) {
       const move = game.moves[i];
       if (move) {
@@ -53,7 +51,7 @@ const ViewGamePage = () => {
         const spiece = start.cell;
         const epiece = end.cell;
         newBoardState[start.rowIndex][start.cellIndex] = spiece;
-        if(epiece!='')
+        if(epiece !== '')
           newBoardState[end.rowIndex][end.cellIndex] = epiece;
         else
           newBoardState[end.rowIndex][end.cellIndex] = '';
@@ -79,8 +77,6 @@ const ViewGamePage = () => {
     return <div>Loading...</div>;
   }
 
-  console.log(game);
-
   if (!game || !game.moves || game.moves.length === 0) {
     return <div>No game data found or moves available.</div>;
   }
@@ -94,15 +90,12 @@ const ViewGamePage = () => {
   };
 
   return (
-    <div className='main h-screen bg-gray-900 text-white overflow-auto p-4'>
-      <div className='flex justify-center text-2xl font-semibold mb-4'>
+    <div className='main min-h-screen bg-gray-900 text-white p-4'>
+      <div className='text-center text-2xl font-semibold mb-4'>
         Final Position
       </div>
-      <div className='flex h-[85vh]'>
-        <div className='w-1/4'>
-          <Chat />
-        </div>
-        <div className='w-1/2 flex flex-col items-center'>
+      <div className='flex flex-col lg:flex-row lg:gap-4 items-center lg:items-start lg:justify-around h-full lg:h-[85vh]'>
+        <div className='flex flex-col lg:w-3/4 items-center mb-4 lg:mb-0'>
           <div className='flex mb-4'>
             <button className='bg-blue-500 text-white py-2 px-4 rounded mr-2' onClick={handleBackward}>Backward</button>
             <button className='bg-blue-500 text-white py-2 px-4 rounded' onClick={handleForward}>Forward</button>
@@ -113,43 +106,41 @@ const ViewGamePage = () => {
             <Board grid={gameGrid} boxColor={boxColor} piece={piece} />
           )}
         </div>
-        <div className='w-1/4'>
-          <div className='flex flex-col flex-grow items-center bg-[#262522] rounded-lg m-4 overflow-hidden'>
-            <div className='flex items-start gap-4 p-4 w-full bg-[rgb(28,27,25)] rounded-t-lg'>
-              <img src={user?.photos?.length > 0 ? `https://chess-website-zs36.onrender.com/uploads/${user.photos[0]}` : '/user.svg'} alt="User" className='w-16 h-16 p-2 rounded-full border-2 border-gray-700' />
-              <div>
-                <p className='text-lg font-bold'>{user?.username || 'Guest'}</p>
-                <p className='text-sm text-gray-400'>{game.userSide === 1 ? 'White' : 'Black'}</p>
-              </div>
-            </div>
-            <div className='flex flex-col w-full gap-2 h-64 p-2'>
-              <h2 className='text-lg font-bold mb-2'>Moves</h2>
-              <div className='h-[1px] bg-slate-400'></div>
-              <div ref={movesContainerRef} className='overflow-y-auto custom-scrollbar'>
-                <ul className='grid grid-cols-2 rounded-md overflow-hidden'>
-                  {game.moves.map((move, index) => (
-                    <li className='flex items-center justify-between p-2 bg-[#201f1d] mb-2' key={index}>
-                      {index % 2 === 0 && (
-                        <span className='text-sm'>{index / 2 + 1}</span>
-                      )}
-                      <div className='flex items-center'>
-                        <img className='h-6' src={piece(move.start.cell)} alt="" />
-                        {`(${letters[move.end.cellIndex]}${8 - move.end.rowIndex})`}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-            <div className='mt-4 flex items-start gap-4 p-4 w-full bg-[rgb(28,27,25)] rounded-b-lg'>
-              <img src={opponent?.photos?.length > 0 ? `https://chess-website-zs36.onrender.com/uploads/${opponent.photos[0]}` : '/user.svg'} alt="Opponent" className='w-16 h-16 rounded-full border-2 border-gray-700 p-2' />
-              <div>
-                <p className='text-lg font-bold'>{opponentName}</p>
-                <p className='text-sm text-gray-400'>{game.userSide === 1 ? 'Black' : 'White'}</p>
-              </div>
+        <div className='flex flex-col flex-grow w-2/3 lg:w-1/4 items-center bg-[#262522] rounded-lg p-4'>
+          <div className='flex items-center gap-4 w-full bg-[rgb(28,27,25)] rounded-lg p-4 mb-4'>
+            <img src={user?.photos?.length > 0 ? `https://chess-website-zs36.onrender.com/uploads/${user.photos[0]}` : '/user.svg'} alt="User" className='w-16 h-16 p-2 rounded-full border-2 border-gray-700' />
+            <div>
+              <p className='text-lg font-bold'>{user?.username || 'Guest'}</p>
+              <p className='text-sm text-gray-400'>{game.userSide === 1 ? 'White' : 'Black'}</p>
             </div>
           </div>
-          <button className='bg-blue-500 text-white py-2 px-4 rounded mt-4' onClick={() => navigate('/profile')}>
+          <div className='flex flex-col w-full gap-2'>
+            <h2 className='text-lg font-bold mb-2'>Moves</h2>
+            <div className='h-[1px] bg-slate-400'></div>
+            <div ref={movesContainerRef} className='overflow-y-auto custom-scrollbar h-64'>
+              <ul className='grid grid-cols-2 rounded-md overflow-hidden'>
+                {game.moves.map((move, index) => (
+                  <li className='flex items-center justify-between p-2 bg-[#201f1d] mb-2' key={index}>
+                    {index % 2 === 0 && (
+                      <span className='text-sm'>{index / 2 + 1}</span>
+                    )}
+                    <div className='flex items-center'>
+                      <img className='h-6' src={piece(move.start.cell)} alt="" />
+                      {`(${letters[move.end.cellIndex]}${8 - move.end.rowIndex})`}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className='flex items-center gap-4 w-full bg-[rgb(28,27,25)] rounded-lg p-4 mt-4'>
+            <img src={opponent?.photos?.length > 0 ? `https://chess-website-zs36.onrender.com/uploads/${opponent.photos[0]}` : '/user.svg'} alt="Opponent" className='w-16 h-16 rounded-full border-2 border-gray-700 p-2' />
+            <div>
+              <p className='text-lg font-bold'>{opponentName}</p>
+              <p className='text-sm text-gray-400'>{game.userSide === 1 ? 'Black' : 'White'}</p>
+            </div>
+          </div>
+          <button className='bg-blue-500 text-white py-2 px-4 rounded mt-4 w-full lg:w-auto' onClick={() => navigate('/profile')}>
             Back to Profile
           </button>
         </div>

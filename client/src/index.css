@@ -16,33 +16,82 @@ input{
 button{
   background-color: #81b64c;
 }
+/* Board Container */
 .grid-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
 }
 
+/* Grid Row */
 .grid-row {
   display: flex;
 }
 
+/* Grid Cell */
 .grid-cell {
-  /* @apply w-16 h-16; */
-  width: 4.5rem;
-  height: 4.5rem;
+  width: 11vw; /* Adjust based on viewport width */
+  height: 11vw; /* Adjust based on viewport width */
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
 }
 
-.grid-cell img {
-  transition: transform 0.3s ease; /* Add a transform transition */
+/* Adjust cell size for larger screens */
+@media (min-width: 768px) {
+  .grid-cell {
+    width: 8vw; /* Slightly smaller cells on larger screens */
+    height: 8vw;
+  }
 }
 
-/* Adjust the scale on hover */
-.grid-cell:hover img {
-  transform: scale(1.1); /* Scale the piece on hover */
+@media (min-width: 1024px) {
+  .grid-cell {
+    width: 5.5vw; /* Further reduce size for larger screens */
+    height: 5.5vw;
+  }
 }
+
+@media (min-width: 1240px) {
+  .grid-cell {
+    width: 5vw; /* Smaller cells on very large screens */
+    height: 5vw;
+  }
+}
+
+@media (min-width: 1360px) {
+  .grid-cell {
+    width: 4.5vw; /* Smaller cells on very large screens */
+    height: 4.5vw;
+  }
+}
+
+/* Hover effect */
+.grid-cell img {
+  transition: transform 0.3s ease;
+}
+
+.grid-cell:hover img {
+  transform: scale(1.1);
+}
+
+/* General styles */
+.main {
+  background-color: hsl(36deg 5.49% 17.84%);
+  color: white;
+}
+
+input {
+  background-color: hsl(40deg 2.56% 22.94%);
+}
+
+button {
+  background-color: #81b64c;
+}
+
 
 .joinRoom{
   filter: drop-shadow(0 0.2rem 0.3rem rgba(0,0,0,.4))

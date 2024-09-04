@@ -35,7 +35,7 @@ const MatchPage = () => {
     };
 
     const confirmLeaveRoom = () => {
-        socket.emit('leaveRoom', {user,room});
+        socket.emit('leaveRoom', { user, room });
         setShowLeaveConfirmation(false);
         setWinner({ winnerName: opponentName }); // Assuming opponent wins when leaving
     };
@@ -75,18 +75,18 @@ const MatchPage = () => {
 
     return (
         <>
-            <div className='main h-screen bg-gray-900 text-white overflow-auto'>
+            <div className='main min-h-screen bg-gray-900 text-white overflow-auto'>
                 <AnimatePresence mode='wait'>
                     {opponent === null && (
                         <motion.div
-                            className='bg-black opacity-50 absolute h-full w-full flex justify-center items-center'
+                            className='bg-black opacity-50 absolute inset-0 flex justify-center items-center'
                             variants={waitingVariants}
                             key='waiting'
                             initial='hidden'
                             animate='visible'
                             exit='exit'
                         >
-                            <div className='text-3xl flex flex-col gap-4 justify-center items-center w-1/3 h-1/2 bg-[#262522] rounded-xl'>
+                            <div className='text-2xl md:text-3xl flex flex-col gap-4 justify-center items-center w-3/4 md:w-1/3 h-1/2 bg-[#262522] rounded-xl p-4'>
                                 WAITING FOR THE OPPONENT
                                 <motion.div
                                     className='rounded-full h-3 w-3 bg-white'
@@ -99,47 +99,47 @@ const MatchPage = () => {
 
                     {opponent !== null && (
                         <motion.div
-                            className='m-4'
+                            className='m-2 md:m-4'
                             variants={matchVariants}
                             key='match'
                             initial='hidden'
                             animate='visible'
                         >
-                            <div className='flex justify-center text-2xl font-semibold mb-4'>
+                            <div className='text-xl md:text-2xl font-semibold mb-4 text-center'>
                                 {turn === 1 ? 'White\'s Turn' : 'Black\'s Turn'}
                             </div>
-                            <div className='flex h-[85vh]'>
-                                <div className='w-1/4'>
+                            <div className='flex flex-col md:flex-row h-[80vh] md:h-[85vh]'>
+                                <div className='flex-1 md:w-1/4 p-2'>
                                     <Chat />
                                 </div>
-                                <div className='w-1/2 flex justify-center'>
+                                <div className='flex-1 md:w-1/2 flex justify-center p-2'>
                                     <ChessBoard />
                                 </div>
-                                <div className='w-1/4'>
-                                    <div className='flex flex-col flex-grow items-center bg-[#262522] rounded-lg m-4 overflow-hidden'>
+                                <div className='flex-1 md:w-1/4 p-2'>
+                                    <div className='flex flex-col flex-grow items-center bg-[#262522] rounded-lg overflow-hidden'>
                                         <div className='flex items-start gap-4 p-4 w-full bg-[rgb(28,27,25)] rounded-t-lg'>
                                             <img
                                                 src={user?.photos?.length > 0 ? 'https://chess-website-zs36.onrender.com/uploads/' + user?.photos[0] : '/user.svg'}
                                                 alt="User"
-                                                className='w-16 h-16 p-2 rounded-full border-2 border-gray-700'
+                                                className='w-12 h-12 md:w-16 md:h-16 p-2 rounded-full border-2 border-gray-700'
                                             />
                                             <div>
-                                                <p className='text-lg font-bold'>{user?.username || 'Guest'}</p>
+                                                <p className='text-lg md:text-xl font-bold'>{user?.username || 'Guest'}</p>
                                                 <p className='text-sm text-gray-400'>{userSide === 1 ? 'White' : 'Black'}</p>
                                             </div>
                                         </div>
                                         <div className='flex flex-col w-full gap-2 h-64 p-2'>
-                                            <h2 className='text-lg font-bold mb-2'>Total Moves</h2>
+                                            <h2 className='text-lg md:text-xl font-bold mb-2'>Total Moves</h2>
                                             <div className='h-[1px] bg-slate-400'></div>
                                             <div ref={movesContainerRef} className='overflow-y-auto custom-scrollbar'>
-                                                <ul className='grid grid-cols-2 rounded-md overflow-hidden'>
+                                                <ul className='grid grid-cols-2 gap-2'>
                                                     {totalMoves.map((move, index) => (
-                                                        <li className='flex items-center justify-between p-2 bg-[#201f1d] mb-2' key={index}>
+                                                        <li className='flex items-center justify-between p-2 bg-[#201f1d] mb-2 rounded-md' key={index}>
                                                             {index % 2 === 0 && (
                                                                 <span className='text-sm'>{index / 2 + 1}</span>
                                                             )}
                                                             <div className='flex items-center'>
-                                                                <img className='h-6' src={piece(move.start.cell)} alt="" />
+                                                                <img className='h-5 md:h-6' src={piece(move.start.cell)} alt="" />
                                                                 {`(${letters[move.end.cellIndex]}${8 - move.end.rowIndex})`}
                                                             </div>
                                                         </li>
@@ -151,17 +151,17 @@ const MatchPage = () => {
                                             <img
                                                 src={opponent?.photos?.length > 0 ? 'https://chess-website-zs36.onrender.com/uploads/' + opponent?.photos[0] : '/user.svg'}
                                                 alt="Opponent"
-                                                className='w-16 h-16 rounded-full border-2 border-gray-700 p-2'
+                                                className='w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-gray-700 p-2'
                                             />
                                             <div>
-                                                <p className='text-lg font-bold'>{opponentName}</p>
+                                                <p className='text-lg md:text-xl font-bold'>{opponentName}</p>
                                                 <p className='text-sm text-gray-400'>{opponentSide === 1 ? 'White' : 'Black'}</p>
                                             </div>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div className='mt-4 flex justify-center'>
                                         <button
-                                            className='rounded-xl font-semibold p-2 overflow-hidden'
+                                            className='rounded-xl font-semibold p-2 bg-blue-500 text-white hover:bg-blue-600 transition duration-300'
                                             onClick={handleLeaveRoom}
                                         >
                                             Leave Match
@@ -175,9 +175,9 @@ const MatchPage = () => {
 
                 {showLeaveConfirmation && (
                     <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50'>
-                        <div className='bg-[rgb(28,27,25)] w-1/3 p-8 rounded-lg shadow-lg text-center'>
-                            <h2 className='text-2xl font-bold mb-4'>Are you sure you want to leave?</h2>
-                            <h3 className='text-2xl font-bold mb-4'>(If you leave, then opponent wins the match)</h3>
+                        <div className='bg-[rgb(28,27,25)] w-3/4 md:w-1/3 p-8 rounded-lg shadow-lg text-center'>
+                            <h2 className='text-xl md:text-2xl font-bold mb-4'>Are you sure you want to leave?</h2>
+                            <h3 className='text-lg md:text-xl font-bold mb-4'>(If you leave, then opponent wins the match)</h3>
                             <div className='flex justify-around mb-4'>
                                 <button
                                     onClick={confirmLeaveRoom}
@@ -192,49 +192,6 @@ const MatchPage = () => {
                                     Cancel
                                 </button>
                             </div>
-                        </div>
-                    </div>
-                )}
-
-                {winner && (
-                    <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50'>
-                        <div className='bg-[rgb(28,27,25)] w-2/5 p-8 rounded-lg shadow-lg text-center'>
-                            <h2 className='text-4xl font-bold mb-4'>
-                                {user.username === winner.winnerName ? 'You Win!' : `${winner.winnerName} Wins`}
-                            </h2>
-                            <div className='flex items-center justify-around mb-4'>
-                                <div className='text-center'>
-                                    <div className='flex items-center gap-4'>
-                                        <img
-                                            src={user?.photos?.length > 0 ? 'https://chess-website-zs36.onrender.com/uploads/' + user?.photos[0] : '/user.svg'}
-                                            alt="User"
-                                            className='w-16 h-16 rounded-full border-2 border-gray-700 p-2'
-                                        />
-                                        <p className='text-3xl'>{user.username}</p>
-                                    </div>
-                                </div>
-                                <div className='flex text-4xl gap-4'>
-                                    <div>{user.username === winner.winnerName ? '1' : '0'}</div>
-                                    <p>-</p>
-                                    <div>{opponentName === winner.winnerName ? '1' : '0'}</div>
-                                </div>
-                                <div className='text-center'>
-                                    <div className='flex items-center gap-4'>
-                                        <img
-                                            src={opponent?.photos?.length > 0 ? 'https://chess-website-zs36.onrender.com/uploads/' + opponent?.photos[0] : '/user.svg'}
-                                            alt="Opponent"
-                                            className='w-16 h-16 rounded-full border-2 border-gray-700 p-2'
-                                        />
-                                        <p className='text-3xl'>{opponentName}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <button
-                                onClick={handleBackToHome}
-                                className='bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300'
-                            >
-                                Back to Home
-                            </button>
                         </div>
                     </div>
                 )}
